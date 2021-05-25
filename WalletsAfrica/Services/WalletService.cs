@@ -68,16 +68,16 @@ namespace WalletsAfrica.Services
             return JsonConvert.DeserializeObject<VerifyBvnResponse>(response);
         }
 
-        public async Task<GeneratSubwalletResponseData> GetUserByPhoneNumberAsync(string phoneNumber)
+        public async Task<GeneratSubwalletResponse> GetUserByPhoneNumberAsync(string phoneNumber)
         {
             var response = await client.Post(Endpoints.GETUSER, new { phoneNumber, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<GeneratSubwalletResponseData>(response);
+            return JsonConvert.DeserializeObject<GeneratSubwalletResponse>(response);
         }
 
-        public async Task<GeneratSubwalletResponseData> GetUserByEmailAsync(string email)
+        public async Task<GeneratSubwalletResponse> GetUserByEmailAsync(string email)
         {
             var response = await client.Post(Endpoints.GETUSER, new { email, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<GeneratSubwalletResponseData>(response);
+            return JsonConvert.DeserializeObject<GeneratSubwalletResponse>(response);
         }
 
         public async Task<BalanceResponse> GetBalanceAsync(string currency, string phoneNumber)
