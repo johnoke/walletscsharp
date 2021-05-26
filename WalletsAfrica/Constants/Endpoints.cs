@@ -18,5 +18,16 @@ namespace WalletsAfrica.Constants
         public const string GETUSER = "/wallet/getuser";
         public const string WALLETBALANCE = "/wallet/balance";
 
+        public const string BANKTRANSFERDETAILS = "/transfer/bank/details";
+        public const string BANKACCOUNTTRANSFER = "/transfer/bank/account";
+        public const string BANKACCOUNTENQUIRY = "/transfer/bank/account/enquire";
+        public const string GETBANKS = "/transfer/banks/all";
+
+        public const string AIRTIMEPROVIDERS = "/bills/airtime/providers";
+        public const string AIRTIMEPURCHASE = "/bills/airtime/purchase";
+
+        public const string RESOLVEBVN = "/account/resolvebvn";
+        public const string RESOLVEBVNWITHDETAILS = "/account/resolvebvn/details";
+
     }
 }
