@@ -6,9 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Constants\" />
-    <Folder Include="Entities\" />
     <Folder Include="Infrastructure\" />
-    <Folder Include="Services\" />
     <Folder Include="Entities\Self\" />
     <Folder Include="Entities\Useful\" />
   </ItemGroup>
