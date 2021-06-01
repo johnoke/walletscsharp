@@ -1,91 +1,78 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
-using WalletsAfrica.Constants;
-using WalletsAfrica.Entities.Self;
-using WalletsAfrica.Entities.Useful;
-using WalletsAfrica.Entities.Wallet;
+using Newtonsoft.Json;
 using WalletsAfrica.Infrastructure;
+using WalletsAfrica.Entities.Wallets;
 
 namespace WalletsAfrica.Services
 {
     public class WalletService
     {
-        private readonly IWalletsAfricaClient client;
-
         public WalletService(IWalletsAfricaClient client)
         {
             this.client = client;
         }
+        IWalletsAfricaClient client;
 
-        public async Task<DebitResponse> DebitAsync(string transactionReference, decimal amount, string phoneNumber)
+        public async Task<DebitWalletResponse> DebitWalletAsync(string transactionReference, double amount, string phoneNumber)
         {
-            var response = await client.Post(Endpoints.DEBITWALLET, new { transactionReference, amount, phoneNumber, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<DebitResponse>(response);
+            var response = await client.Post("/wallet/debit", new DebitWalletRequest { TransactionReference = transactionReference, Amount = amount, PhoneNumber = phoneNumber, SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<DebitWalletResponse>(response);
         }
 
-        public async Task<CreditResponse> CreditAsync(string transactionReference, decimal amount, string phoneNumber)
+        public async Task<CreditWalletResponse> CreditWalletAsync(string transactionReference, double amount, string phoneNumber)
         {
-            var response = await client.Post(Endpoints.CREDITWALLET, new { transactionReference, amount, phoneNumber, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<CreditResponse>(response);
+            var response = await client.Post("/wallet/credit", new DebitWalletRequest { TransactionReference = transactionReference, Amount = amount, PhoneNumber = phoneNumber, SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<CreditWalletResponse>(response);
         }
 
-        public async Task<GeneratSubwalletResponse> GenerateSubWalletAsync(string firstName, string lastName, string email, DateTime dateOfBirth, string currency="NGN")
+        public async Task<GenerateWalletResponse> GenerateWalletAsync(string firstName, string lastName, string email, string dateOfBirth, string currency)
         {
-            var response = await client.Post(Endpoints.GENERATESUBWALLET, new { firstName, lastName, email, dateOfBirth, currency, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<GeneratSubwalletResponse>(response);
+            var response = await client.Post("/wallet/generate", new GenerateWalletRequest { FirstName = firstName, LastName = lastName, Email = email, SecretKey = client.SecretKey, DateOfBirth = dateOfBirth, Currency = currency });
+            return JsonConvert.DeserializeObject<GenerateWalletResponse>(response);
         }
 
-        public async Task<RetrieveAccountNumberResponse> RetrieveAccountNumberAsync(string phoneNumber)
+        public async Task<RetrieveAccountResponse> RetrieveAccountAsync(string phoneNumber)
         {
-            var response = await client.Post(Endpoints.RETRIEVEACCOUNTNUMBER, new { phoneNumber, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<RetrieveAccountNumberResponse>(response);
+            var response = await client.Post("/wallet/nuban", new RetrieveAccountRequest { PhoneNumber = phoneNumber, SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<RetrieveAccountResponse>(response);
         }
 
-        public async Task<GenericResponse> SetPasswordAsync(string phoneNumber, string password)
+        public async Task<SetPasswordResponse> SetPasswordAsync(string phoneNumber, string password)
         {
-            var response = await client.Post(Endpoints.SETPASSWORD, new { phoneNumber, password, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<GenericResponse>(response);
+            var response = await client.Post("/wallet/password", new SetPasswordRequest { PhoneNumber = phoneNumber, Password = password, SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<SetPasswordResponse>(response);
         }
 
-        public async Task<GenericResponse> SetPinAsync(string phoneNumber, string transactionPin)
+        public async Task<SetPinResponse> SetPinAsync(string phoneNumber, string transactionPin)
         {
-            var response = await client.Post(Endpoints.SETPIN, new { phoneNumber, transactionPin, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<GenericResponse>(response);
+            var response = await client.Post("/wallet/pin", new SetPinRequest { PhoneNumber = phoneNumber, TransactionPin = transactionPin, SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<SetPinResponse>(response);
         }
 
-        public async Task<TransactionResponse> GetTransactionsAsync(string currency, int transactionType, DateTime dateFrom, DateTime dateTo, string transactionPin, string phoneNumber, int skip, int take)
+        public async Task<SubTransactionResponse> SubTransactionAsync(int skip, int take, string dateFrom, string dateTo, int transactionType, string phoneNumber, string transactionPin, string currency)
         {
-            var response = await client.Post(Endpoints.WALLETTRANSACTIONS, new { currency, transactionType, dateFrom, dateTo, skip, take, transactionPin, phoneNumber, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<TransactionResponse>(response);
-        }
-
-        public async Task<VerifyBvnResponse> VerifyBvnAsync(string phoneNumber, string bvn, DateTime dateOfBirth)
-        {
-            var response = await client.Post(Endpoints.VERIFYBVN, new { phoneNumber, bvn, dateOfBirth, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<VerifyBvnResponse>(response);
-        }
-
-        public async Task<GeneratSubwalletResponse> GetUserByPhoneNumberAsync(string phoneNumber)
-        {
-            var response = await client.Post(Endpoints.GETUSER, new { phoneNumber, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<GeneratSubwalletResponse>(response);
-        }
-
-        public async Task<GeneratSubwalletResponse> GetUserByEmailAsync(string email)
-        {
-            var response = await client.Post(Endpoints.GETUSER, new { email, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<GeneratSubwalletResponse>(response);
-        }
-
-        public async Task<BalanceResponse> GetBalanceAsync(string currency, string phoneNumber)
-        {
-            var response = await client.Post(Endpoints.WALLETBALANCE, new { currency, phoneNumber, SecretKey = client.SecretKey });
-            return JsonConvert.DeserializeObject<BalanceResponse>(response);
+            var response = await client.Post("/wallet/transactions", new SubTransactionRequest { Skip = skip, Take = take, DateFrom = dateFrom, DateTo = dateTo, TransactionType = transactionType, PhoneNumber = phoneNumber, TransactionPin = transactionPin,  Currency = currency  , SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<SubTransactionResponse>(response);
         }
 
 
+        public async Task<GetUserByPhoneResponse> GetUserByPhoneAsync(string phoneNumber)
+        {
+            var response = await client.Post("/wallet/getuser", new GetUserByPhoneRequest { PhoneNumber = phoneNumber, SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<GetUserByPhoneResponse>(response);
+        }
+
+        public async Task<GetUserByEmailResponse> GetUserByEmailAsync(string email)
+        {
+            var response = await client.Post("/wallet/getuser", new GetUserByEmailRequest { Email = email, SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<GetUserByEmailResponse>(response);
+        }
+
+        public async Task<GetSubBalanceResponse> GetSubBalanceAsync(string phoneNumber, string currency)
+        {
+            var response = await client.Post("/wallet/balance", new GetSubBalanceRequest { PhoneNumber = phoneNumber, Currency = currency, SecretKey = client.SecretKey });
+            return JsonConvert.DeserializeObject<GetSubBalanceResponse>(response);
+        }
     }
 }

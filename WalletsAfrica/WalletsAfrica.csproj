@@ -6,12 +6,21 @@
 
   <ItemGroup>
     <Folder Include="Constants\" />
+    <Folder Include="Entities\" />
     <Folder Include="Infrastructure\" />
+    <Folder Include="Services\" />
     <Folder Include="Entities\Self\" />
     <Folder Include="Entities\Useful\" />
+    <Folder Include="Entities\Wallets\" />
+    <Folder Include="Entities\Payout\" />
+    <Folder Include="Entities\Airtime\" />
+    <Folder Include="Entities\Cards\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WalletsAfrica.csproj" />
   </ItemGroup>
 </Project>
