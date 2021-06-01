@@ -12,8 +12,8 @@ namespace Example
             SelfService selfService = new SelfService(client);
             try
             {
-                var transactions = selfService.GetTransactionsAsync("NGN", 0, Convert.ToDateTime("2021/01/01"), Convert.ToDateTime("2021/06/01"), 0, 100).Result;
-                Console.WriteLine($"{transactions.Data.Transactions.Count} transactions");
+                var transactions = selfService.GetMainTransactionAsync(0, 5, "2021-02-15", "2021-05-21", 1, "NGN").Result;
+                Console.WriteLine($"{transactions.Data.Transactions.Length} transactions");
                 Console.ReadKey();
             }
             catch (Exception ex)
