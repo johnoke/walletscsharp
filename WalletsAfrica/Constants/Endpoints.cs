@@ -40,5 +40,6 @@ namespace WalletsAfrica.Constants
         public const string CARDTRANSACTIONS = "/cards/transactions";
         public const string CHANGECARDPIN = "/cards/ChangePin";
 
+
     }
 }
