@@ -29,5 +29,17 @@ namespace WalletsAfrica.Constants
         public const string RESOLVEBVN = "/account/resolvebvn";
         public const string RESOLVEBVNWITHDETAILS = "/account/resolvebvn/details";
 
+        public const string STATESANDLGAS = "/cards/states";
+        public const string IDENTITYTYPES = "/cards/Idtypes";
+        public const string CREATECARD = "/cards/create";
+        public const string FUNDCARD = "/cards/fund";
+        public const string DEBITCARD = "/cards/withdraw";
+        public const string FREEZEECARD = "/cards/freeze";
+        public const string UNFREEZEECARD = "/cards/unfreeze";
+        public const string CARDDETAILS = "/cards/details";
+        public const string CARDTRANSACTIONS = "/cards/transactions";
+        public const string CHANGECARDPIN = "/cards/ChangePin";
+
+
     }
 }
