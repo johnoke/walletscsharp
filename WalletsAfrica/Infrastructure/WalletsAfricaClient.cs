@@ -44,5 +44,24 @@ namespace WalletsAfrica.Infrastructure
             return await response.Content.ReadAsStringAsync();
         }
 
+        public async Task<string> Get(string url = "")
+        {
+            var client = new HttpClient();
+            url = this.BaseUrl + url;
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {this.PublicKey}");
+            client.Timeout = TimeSpan.FromMinutes(5);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpResponseMessage response;
+            response = await client.GetAsync(url);
+            var httpStatusCode = (int)response.StatusCode;
+            if (httpStatusCode == 200 || httpStatusCode == 201 || httpStatusCode == 202)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            return await response.Content.ReadAsStringAsync();
+        }
+
     }
 }
